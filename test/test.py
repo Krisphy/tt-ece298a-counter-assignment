@@ -14,8 +14,14 @@ async def test_binary_counter(dut):
     dut.rst_n.value = 1
     dut.ui_in.value = 0b100 # output_en = 0, count_en = 0, load_en = 0 (in said order)
     dut.uio_in.value = 0
-    dut.uo_out.value = 0
     await ClockCycles(dut.clk, 2) # settle inputs
+
+    dut._log.info("Testing Asynchronous Reset")
+    dut.rst_n.value = 0             
+    await ClockCycles(dut.clk, 2)   # wait for reset to complete (input and update output)
+    assert int(dut.uo_out.value) == 0, f"Expected 0 after reset, got {int(dut.uo_out.value)}"
+    dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 2)   # wait for released reset to complete (input and update output)
 
 
     dut._log.info("Testing Basic Counting")
