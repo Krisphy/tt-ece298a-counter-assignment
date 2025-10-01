@@ -12,7 +12,7 @@ async def test_binary_counter(dut):
     # initial inputs
     dut.ena.value = 1
     dut.rst_n.value = 1
-    dut.ui_in.value = 0 # output_en = 0, count_en = 0, load_en = 0 (in said order)
+    dut.ui_in.value = 0b100 # output_en = 0, count_en = 0, load_en = 0 (in said order)
     dut.uio_in.value = 0
     await ClockCycles(dut.clk, 2) # settle inputs
 
